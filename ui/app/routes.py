@@ -4,11 +4,12 @@ from app import application
 @application.route('/index')
 def index():
     user = {'username': 'GSSS'}
+    #<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/style.css') }}">
     return '''
 <html>
     <head>
         <title>IncentiDRIVE</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+        <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
     </head>
     <body>
         <h1>Hello, ''' + user['username'] + '''!</h1>
