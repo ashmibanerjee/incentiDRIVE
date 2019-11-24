@@ -5,8 +5,8 @@ from app import data_provider
 @application.route('/index')
 def index():
     #<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/style.css') }}">
-    user = data_provider.load_user()
-    user_routes = data_provider.get_user_routes(user)
+    user_id = data_provider.load_user_id()
+    user_routes = data_provider.get_user_routes(user_id)
     selected_route = 0
     return '''
     <html>
@@ -18,27 +18,22 @@ def index():
             <div class="row">IncentiDRIVE</div>
             <div class="column">''' + get_routes_list(user_routes) + '''</div>
             <div class="column">''' \
-                    + get_route_description(user_routes[selected_route], user) \
-                    + '''</div>
+                    + get_route_description(
+                            user_routes[selected_route], user_id) + '''</div>
         </div> 
         </body>
     </html>'''
 
 def get_routes_list(routes):
-    route_elements = [route.name for route in routes]
+    route_elements = ["<h1>{}</h1><p>{}</p>".format(
+        route.name, route.path.length()) for route in routes]
     return get_list(route_elements, "routes")
 
-def get_leaderboard_list(leaderboard_list):
-    leaderboard_entries = ["{}: {} FuelUnits".format(
-            le.user.name, le.performance.fuel_consumption) \
-            for le in leaderboard_list]
-    return get_list(leaderboard_entries, "leaderboard")
-
-def get_route_description(route, user):
+def get_route_description(route, user_id):
     return '''
     <div class="route-header">
         <h2>{}</h2>'''.format(route.name) + \
-        '''<p>{} km</p>'''.format(route.distance) + \
+        '''<p>{} km</p>'''.format(route.path.length()) + \
     '''</div>
     <div class="route-personal-stats">
         <h2>Route progress</h2>
@@ -48,8 +43,15 @@ def get_route_description(route, user):
     <div class="route-map">
         <p>Map</p>  '''+  get_map() +'''
     </div>
-    <div class="leaderboard">''' + get_leaderboard_list(route.leaderboard_list()) \
-            + '''</div>'''
+    <div class="leaderboard">''' \
+            + get_leaderboard_list(route.participations) + '''</div>'''
+
+def get_leaderboard_list(participations):
+    # TODO: sort participations
+    leaderboard_entries = ["{}: {} l on avg.".format(
+            p.user_name, p.total_consumption / p.num_tries) \
+            for p in participations]
+    return get_list(leaderboard_entries, "leaderboard")
 
 def get_list(elements, style_class):
     return "<ul style=\"list-style-type:{};\">\n".format(style_class) + \

@@ -1,20 +1,27 @@
-from app.data.user import User
-from app.data.performance import Performance
-
 class Route(object):
 
-    def __init__(self, rid, name, distance):
-        self.rid = rid
+    def __init__(self, route_id, name, path):
+        self.route_id = route_id
         self.name = name
-        self.distance = distance
+        self.path = path
+        self.participations = []
 
-    def leaderboard_list(self):
-        return [LeaderboardEntry(User(1, "Jim"), "Sept 2019", Performance(1.2)),
-                LeaderboardEntry(User(0, "John"), "Oct 2019", Performance(1.3))]
+    def set_participations(self, participations):
+        self.participations = participations
 
-class LeaderboardEntry(object):
+class Path(object):
 
-    def __init__(self, user, time, performance):
-        self.user = user
-        self.time = time
-        self.performance = performance
+    def __init__(self, start_point, end_point):
+        self.start_point = start_point
+        self.end_point = end_point
+
+    def length(self):
+        return 42.0
+
+class Participation(object):
+
+    def __init__(self, user_id, user_name, num_tries, total_consumption):
+        self.user_id = user_id
+        self.user_name = user_name
+        self.num_tries = num_tries
+        self.total_consumption = total_consumption
