@@ -15,7 +15,7 @@
 ## How we built it
 
 * Frontend:
-      * Python Flask
+   * Python Flask
 * Backend:
    * Solidity:
       * deploy the smart contract
@@ -26,7 +26,7 @@
       * get the average fuel consumption score
       * transfer rewards (tokens) at the end of the month
 * Integration:
-      * Web3js
+   * Web3js
 
 ## Challenges we ran into
 
