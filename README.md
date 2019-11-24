@@ -17,17 +17,16 @@
 * Frontend:
       * Python Flask
 * Backend:
-      * Solidity:
-              * deploy the contract
-                     * add User
-                     * add route
-                     * subscribe to the route
-                     * add drive to route
-                     * get the average fuel consumption score
-                     * transfer rewards (tokens) at the end of the month
-
+   * Solidity:
+      * deploy the smart contract
+      * add User
+      * add route
+      * subscribe to the route
+      * add drive to route
+      * get the average fuel consumption score
+      * transfer rewards (tokens) at the end of the month
 * Integration:
-      * Web3js:
+      * Web3js
 
 ## Challenges we ran into
 
