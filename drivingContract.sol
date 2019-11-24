@@ -156,19 +156,19 @@ contract EDToken {
         }
     }
     
-    function getScore(uint user_id, uint route_id) public {
-        return unrScore[user_id][route_id].fuelConsumption/unrScore[user_id][route_id].tries);
+    function getScore(uint user_id, uint route_id) view public returns (uint) {
+        return unrScore[user_id][route_id].fuelConsumption/unrScore[user_id][route_id].tries;
     }
     
-    function getTries(uint user_id, uint route_id) public {
+    function getTries(uint user_id, uint route_id) view public returns (uint) {
         return unrScore[user_id][route_id].tries;
     }
     
-    function getLeader(uint route_id){
+    function getLeader(uint route_id) view public returns (uint) {
         return winners[route_id].user_id;
     }
     
-    function getLeaderScore(uint route_id){
+    function getLeaderScore(uint route_id) view public returns (uint) {
         return winners[route_id].score;
     }
     
