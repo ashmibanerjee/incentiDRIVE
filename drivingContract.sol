@@ -157,7 +157,21 @@ contract EDToken {
     }
     
     function getScore(uint user_id, uint route_id) public {
-        emit ScoreEvent(user_id, route_id, unrScore[user_id][route_id].fuelConsumption/unrScore[user_id][route_id].tries);
+        return unrScore[user_id][route_id].fuelConsumption/unrScore[user_id][route_id].tries);
     }
+    
+    function getTries(uint user_id, uint route_id) public {
+        return unrScore[user_id][route_id].tries;
+    }
+    
+    function getLeader(uint route_id){
+        return winners[route_id].user_id;
+    }
+    
+    function getLeaderScore(uint route_id){
+        return winners[route_id].score;
+    }
+    
+    
     
 }
