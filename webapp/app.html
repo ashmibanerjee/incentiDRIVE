@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IncentiDRIVE</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="./node_modules/web3/dist/web3.min.js"></script></head>
+    <script src="/scripts/tab_loader.js"></script>
+</head>
+<body>
+<div class="tab">
+    <ul style="list-style-type:routes;">
+        <li><button class="tablinks" onclick="openRoute(event, '0')"><h1>Munich city</h1><p>42.0</p></button></li>
+        <li><button class="tablinks" onclick="openRoute(event, '1')"><h1>Munich - Stuttgart</h1><p>42.0</p></button></li>
+    </ul>
+</div>
+<div id="0" class="tabcontent">
+    <div class="route-header">
+        <h2>Munich city</h2><p>42.0 km</p></div>
+        <div class="route-personal-stats">
+            <h2>Route progress</h2>
+            <p>Completed route n times</p>
+            <p>Avg fuel consumtion: x</p>
+        </div>
+        <div class="route-map">
+            <p>Map</p>  
+            <iframe src="IncentiDRIVE_files/embed_002.html" style="border:0;" allowfullscreen="" width="600" height="450" frameborder="0"></iframe>
+        </div>
+        <div class="leaderboard">
+            <ul style="list-style-type:leaderboard;">
+                <li>Alice: 4.26 l on avg.</li>
+                <li>Bob: 4.633333333333334 l on avg.</li>
+            </ul>
+        </div>
+    </div>
+<div id="1" class="tabcontent">
+    <div class="route-header">
+        <h2>Munich - Stuttgart</h2><p>42.0 km</p></div>
+        <div class="route-personal-stats">
+            <h2>Route progress</h2>
+            <p>Completed route n times</p>
+            <p>Avg fuel consumtion: x</p>
+        </div>
+        <div class="route-map">
+            <p>Map</p>  
+            <iframe src="IncentiDRIVE_files/embed_002.html" style="border:0;" allowfullscreen="" width="600" height="450" frameborder="0"></iframe>
+        </div>
+        <div class="leaderboard">
+            <ul style="list-style-type:leaderboard;">
+                <li>Alice: 4.26 l on avg.</li>
+                <li>Bob: 4.633333333333334 l on avg.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h0>Coursetro Instructor</h1>
+        <h2 id="instructor"></h2>
+        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <input id="name" type="text">
+        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+        <input id="age" type="text">
+        <button id="button">Update Instructor</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script>
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        }
+	 web3.eth.defaultAccount = web3.eth.accounts[0];
+	 var CoursetroContract = web3.eth.contract([
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "DriveEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "startPosition",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "endPosition",
+				"type": "string"
+			}
+		],
+		"name": "RouteEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "score",
+				"type": "uint256"
+			}
+		],
+		"name": "ScoreEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			}
+		],
+		"name": "SubscribeEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "wallet_address",
+				"type": "address"
+			}
+		],
+		"name": "UserEvent",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "WinnerEvent",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "fuelConsumed",
+				"type": "uint256"
+			}
+		],
+		"name": "addDrive",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "startPosition",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "endPosition",
+				"type": "string"
+			}
+		],
+		"name": "addRoute",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "wallet_address",
+				"type": "address"
+			}
+		],
+		"name": "addUser",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "delegate",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "a",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getScore",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "user_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "route_id",
+				"type": "uint256"
+			}
+		],
+		"name": "subscribe",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "reciever",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "reciever",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "delegate",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "a",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "s",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+	var Coursetro = CoursetroContract.at('0x88469 0F5DE953cbF2278005b6BB5FeA79ba2F529');
+	alert(Coursetro)
+    console.log(Coursetro);
+    </script></body>
+</html>
