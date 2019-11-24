@@ -19,11 +19,11 @@
 * Backend:
    * Solidity:
       * deploy the smart contract
-      * add User
-      * add route
-      * subscribe to the route
-      * add drive to route
-      * get the average fuel consumption score
+      * add User: adding a new user to the app
+      * add route: new challenge route is added to the system
+      * subscribe to the route: user subscribing to the challenge
+      * add drive to route: user drives along the subscribed challenge
+      * get the average fuel consumption score for the subscribed route
       * transfer rewards (tokens) at the end of the month
 * Integration:
    * Web3js
