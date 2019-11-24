@@ -6,7 +6,7 @@ contract ChargingContract {
     bool unitTransfered;
     uint unitPrice;
     
-    address[] wallets;
+    address wallet;
     
     constructor() public payable {
         owner = msg.sender; //Change
